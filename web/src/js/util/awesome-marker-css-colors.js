@@ -1,0 +1,21 @@
+module.exports = {
+    red: 'D63E2A',
+    orange: 'F69730',
+    green: '72B026',
+    blue: '38AADD',
+    purple: 'D252B9',
+    darkred: '9B3033',
+    darkblue: '0067A3',
+    darkgreen: '728224',
+    darkpurple: '593869',
+    cadetblue: '406472',
+    lightred: 'FF8E7F',
+    beige: 'FFCB92',
+    lightgreen: 'BBF970',
+    lightblue: '87D6FB',
+    pink: 'F48ADF',
+    white: 'FBFBFB',
+    lightgray: 'A3A3A3',
+    gray: '575757',
+    black: '303030'
+}

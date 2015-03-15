@@ -1,0 +1,16 @@
+var configuration = {
+  appApiUrl: '',
+  dataApiUrl: '',
+  webAppUrl: '',
+  survivorsUrl: '',
+  defaultReqwestOpts: {
+    type: 'json',
+    contentType: 'application/json',
+    crossOrigin: true,
+    headers: {
+      'X-Auth-Token': ''
+    },
+  }
+}
+
+module.exports = configuration;

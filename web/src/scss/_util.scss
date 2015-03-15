@@ -1,0 +1,24 @@
+a.invisifill {
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  z-index: 9001;
+  text-index: -9999px;
+  opacity: 0;
+
+  &.with-rollover {
+    @include transition(opacity 0.2s linear);
+
+    &:hover {
+      opacity: 0.2;
+      background: $blue;
+    }
+  }
+}
+
+.center {
+  text-align: center;
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Trak-It Web App</title>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css">
+  <link rel="stylesheet" href="/css/application.css">
+</head>
+<body>
+
+  <header class="navigation" role="banner">
+    <div class="navigation-wrapper">
+      <a href="javascript:void(0)" class="logo">
+        <img src="https://raw.githubusercontent.com/thoughtbot/refills/master/source/images/placeholder_logo_1.png" alt="Logo Image">
+      </a>
+      <a href="javascript:void(0)" class="navigation-menu-button" id="js-mobile-menu">MENU</a>
+      <nav role="navigation">
+        <ul id="js-navigation-menu" class="navigation-menu show">
+          <li class="nav-link"><a href="/map-live">Live Map</a></li>
+          <li class="nav-link"><a href="/direct-messages">Direct Messages</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="loading-modal">
+      <i class="fa fa-cog fa-spin"></i>
+    </div>
+    <div class="main-container">
+      <div id="direct-messages">
+        <h1>Direct (Text) Messages</h1>
+        <button id="send-message">Send Message</button>
+        <table id="direct-message-table" class="tables">
+           <thead>
+              <th>Recipient</th>
+              <th>Sender</th>
+              <th>Timestamp</th>
+              <th>Message</th>
+              <th>Delivered?</th>
+           </thead>
+           <tbody>
+           <tr><td colspan="5">There are no messages to display</td></tr>
+           </tbody>
+      </div>
+  
+      <div id="send-message-form" class="form-modal-container"></div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>
