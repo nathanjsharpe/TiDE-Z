@@ -48,7 +48,7 @@ if ($('#map-live').length > 0) {
 if ($('#leaderboard').length > 0) {
    Leaderboard.init();
 }
-},{"./leaderboard":"/home/gethernm/Desktop/TiDE-Z/client/src/js/leaderboard.js","./loader":"/home/gethernm/Desktop/TiDE-Z/client/src/js/loader.js","./map-live":"/home/gethernm/Desktop/TiDE-Z/client/src/js/map-live.js","jquery":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/jquery/dist/jquery.js","lodash":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js"}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
+},{"./leaderboard":"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaderboard.js","./loader":"/home/gethernm/Desktop/TiDE-Z/web/src/js/loader.js","./map-live":"/home/gethernm/Desktop/TiDE-Z/web/src/js/map-live.js","jquery":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/jquery/dist/jquery.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js"}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/browserify/node_modules/process/browser.js":[function(require,module,exports){
 // shim for using process in browser
 
 var process = module.exports = {};
@@ -108,7 +108,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/jquery/dist/jquery.js":[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.1.3
  * http://jquery.com/
@@ -9315,7 +9315,7 @@ return jQuery;
 
 }));
 
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/leaflet-plugins/layer/tile/Google.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet-plugins/layer/tile/Google.js":[function(require,module,exports){
 /*
  * Google layer using Google Maps API
  */
@@ -9516,7 +9516,7 @@ L.Google.asyncInitialize = function() {
 	L.Google.asyncWait = [];
 };
 
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/leaflet.heat/dist/leaflet-heat.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet.heat/dist/leaflet-heat.js":[function(require,module,exports){
 /*
  (c) 2014, Vladimir Agafonkin
  simpleheat, a tiny JavaScript library for drawing heatmaps with Canvas
@@ -9528,7 +9528,7 @@ L.Google.asyncInitialize = function() {
  https://github.com/Leaflet/Leaflet.heat
 */
 L.HeatLayer=(L.Layer?L.Layer:L.Class).extend({initialize:function(t,i){this._latlngs=t,L.setOptions(this,i)},setLatLngs:function(t){return this._latlngs=t,this.redraw()},addLatLng:function(t){return this._latlngs.push(t),this.redraw()},setOptions:function(t){return L.setOptions(this,t),this._heat&&this._updateOptions(),this.redraw()},redraw:function(){return!this._heat||this._frame||this._map._animating||(this._frame=L.Util.requestAnimFrame(this._redraw,this)),this},onAdd:function(t){this._map=t,this._canvas||this._initCanvas(),t._panes.overlayPane.appendChild(this._canvas),t.on("moveend",this._reset,this),t.options.zoomAnimation&&L.Browser.any3d&&t.on("zoomanim",this._animateZoom,this),this._reset()},onRemove:function(t){t.getPanes().overlayPane.removeChild(this._canvas),t.off("moveend",this._reset,this),t.options.zoomAnimation&&t.off("zoomanim",this._animateZoom,this)},addTo:function(t){return t.addLayer(this),this},_initCanvas:function(){var t=this._canvas=L.DomUtil.create("canvas","leaflet-heatmap-layer leaflet-layer"),i=this._map.getSize();t.width=i.x,t.height=i.y;var a=this._map.options.zoomAnimation&&L.Browser.any3d;L.DomUtil.addClass(t,"leaflet-zoom-"+(a?"animated":"hide")),this._heat=simpleheat(t),this._updateOptions()},_updateOptions:function(){this._heat.radius(this.options.radius||this._heat.defaultRadius,this.options.blur),this.options.gradient&&this._heat.gradient(this.options.gradient),this.options.max&&this._heat.max(this.options.max)},_reset:function(){var t=this._map.containerPointToLayerPoint([0,0]);L.DomUtil.setPosition(this._canvas,t);var i=this._map.getSize();this._heat._width!==i.x&&(this._canvas.width=this._heat._width=i.x),this._heat._height!==i.y&&(this._canvas.height=this._heat._height=i.y),this._redraw()},_redraw:function(){var t,i,a,s,e,n,h,o,r,_=[],d=this._heat._r,l=this._map.getSize(),m=new L.LatLngBounds(this._map.containerPointToLatLng(L.point([-d,-d])),this._map.containerPointToLatLng(l.add([d,d]))),c=void 0===this.options.maxZoom?this._map.getMaxZoom():this.options.maxZoom,u=1/Math.pow(2,Math.max(0,Math.min(c-this._map.getZoom(),12))),g=d/2,f=[],p=this._map._getMapPanePos(),v=p.x%g,w=p.y%g;for(t=0,i=this._latlngs.length;i>t;t++)if(m.contains(this._latlngs[t])){a=this._map.latLngToContainerPoint(this._latlngs[t]),e=Math.floor((a.x-v)/g)+2,n=Math.floor((a.y-w)/g)+2;var y=void 0!==this._latlngs[t].alt?this._latlngs[t].alt:void 0!==this._latlngs[t][2]?+this._latlngs[t][2]:1;r=y*u,f[n]=f[n]||[],s=f[n][e],s?(s[0]=(s[0]*s[2]+a.x*r)/(s[2]+r),s[1]=(s[1]*s[2]+a.y*r)/(s[2]+r),s[2]+=r):f[n][e]=[a.x,a.y,r]}for(t=0,i=f.length;i>t;t++)if(f[t])for(h=0,o=f[t].length;o>h;h++)s=f[t][h],s&&_.push([Math.round(s[0]),Math.round(s[1]),Math.min(s[2],1)]);this._heat.data(_).draw(this.options.minOpacity),this._frame=null},_animateZoom:function(t){var i=this._map.getZoomScale(t.zoom),a=this._map._getCenterOffset(t.center)._multiplyBy(-i).subtract(this._map._getMapPanePos());L.DomUtil.setTransform?L.DomUtil.setTransform(this._canvas,a,i):this._canvas.style[L.DomUtil.TRANSFORM]=L.DomUtil.getTranslateString(a)+" scale("+i+")"}}),L.heatLayer=function(t,i){return new L.HeatLayer(t,i)};
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/leaflet/dist/leaflet-src.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet/dist/leaflet-src.js":[function(require,module,exports){
 /*
  Leaflet, a JavaScript library for mobile-friendly interactive maps. http://leafletjs.com
  (c) 2010-2013, Vladimir Agafonkin
@@ -18709,7 +18709,7 @@ L.Map.include({
 
 
 }(window, document));
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js":[function(require,module,exports){
 (function (global){
 /**
  * @license
@@ -30140,8 +30140,8 @@ L.Map.include({
 }.call(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment-timezone/data/packed/latest.json":[function(require,module,exports){
-module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment-timezone/data/packed/latest.json":[function(require,module,exports){
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
 	"version": "2014j",
 	"zones": [
 		"Africa/Abidjan|LMT GMT|g.8 0|01|-2ldXH.Q",
@@ -30730,11 +30730,11 @@ module.exports=module.exports=module.exports=module.exports=module.exports=modul
 		"Pacific/Pohnpei|Pacific/Ponape"
 	]
 }
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment-timezone/index.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment-timezone/index.js":[function(require,module,exports){
 var moment = module.exports = require("./moment-timezone");
 moment.tz.load(require('./data/packed/latest.json'));
 
-},{"./data/packed/latest.json":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment-timezone/data/packed/latest.json","./moment-timezone":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment-timezone/moment-timezone.js"}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment-timezone/moment-timezone.js":[function(require,module,exports){
+},{"./data/packed/latest.json":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment-timezone/data/packed/latest.json","./moment-timezone":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment-timezone/moment-timezone.js"}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment-timezone/moment-timezone.js":[function(require,module,exports){
 //! moment-timezone.js
 //! version : 0.3.0
 //! author : Tim Wood
@@ -31154,7 +31154,7 @@ moment.tz.load(require('./data/packed/latest.json'));
 	return moment;
 }));
 
-},{"moment":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment/moment.js"}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment/moment.js":[function(require,module,exports){
+},{"moment":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment/moment.js"}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment/moment.js":[function(require,module,exports){
 (function (global){
 //! moment.js
 //! version : 2.9.0
@@ -34201,7 +34201,7 @@ moment.tz.load(require('./data/packed/latest.json'));
 }).call(this);
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/node_modules/shifty/dist/shifty.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/node_modules/shifty/dist/shifty.js":[function(require,module,exports){
 /*! shifty - v1.2.2 - 2014-10-09 - http://jeremyckahn.github.io/shifty */
 ;(function (root) {
 
@@ -35579,7 +35579,7 @@ function token () {
 
 }(this));
 
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/circle.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/circle.js":[function(require,module,exports){
 // Circle shaped progress bar
 
 var Shape = require('./shape');
@@ -35620,7 +35620,7 @@ Circle.prototype._trailString = function _trailString(opts) {
 
 module.exports = Circle;
 
-},{"./shape":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/shape.js","./utils":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/utils.js"}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/line.js":[function(require,module,exports){
+},{"./shape":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/shape.js","./utils":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/utils.js"}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/line.js":[function(require,module,exports){
 // Line shaped progress bar
 
 var Shape = require('./shape');
@@ -35652,7 +35652,7 @@ Line.prototype._trailString = function _trailString(opts) {
 
 module.exports = Line;
 
-},{"./shape":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/shape.js","./utils":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/utils.js"}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/main.js":[function(require,module,exports){
+},{"./shape":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/shape.js","./utils":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/utils.js"}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/main.js":[function(require,module,exports){
 // Different shaped progress bars
 var Line = require('./line');
 var Circle = require('./circle');
@@ -35669,7 +35669,7 @@ module.exports = {
     Path: Path
 };
 
-},{"./circle":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/circle.js","./line":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/line.js","./path":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/path.js","./square":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/square.js"}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/path.js":[function(require,module,exports){
+},{"./circle":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/circle.js","./line":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/line.js","./path":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/path.js","./square":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/square.js"}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/path.js":[function(require,module,exports){
 // Lower level API to animate any kind of svg path
 
 var Tweenable = require('shifty');
@@ -35830,7 +35830,7 @@ Path.prototype._easing = function _easing(easing) {
 
 module.exports = Path;
 
-},{"./utils":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/utils.js","shifty":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/node_modules/shifty/dist/shifty.js"}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/shape.js":[function(require,module,exports){
+},{"./utils":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/utils.js","shifty":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/node_modules/shifty/dist/shifty.js"}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/shape.js":[function(require,module,exports){
 // Base object for different progress bar shapes
 
 var Path = require('./path');
@@ -36060,7 +36060,7 @@ Shape.prototype._trailString = function _trailString(opts) {
 
 module.exports = Shape;
 
-},{"./path":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/path.js","./utils":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/utils.js"}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/square.js":[function(require,module,exports){
+},{"./path":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/path.js","./utils":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/utils.js"}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/square.js":[function(require,module,exports){
 // Square shaped progress bar
 
 var Shape = require('./shape');
@@ -36111,7 +36111,7 @@ Square.prototype._trailString = function _trailString(opts) {
 
 module.exports = Square;
 
-},{"./shape":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/shape.js","./utils":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/utils.js"}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/utils.js":[function(require,module,exports){
+},{"./shape":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/shape.js","./utils":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/utils.js"}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/utils.js":[function(require,module,exports){
 // Utility functions
 
 var PREFIXES = 'webkit moz o ms'.split(' ');
@@ -36204,7 +36204,7 @@ module.exports = {
     isObject: isObject
 };
 
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/q/q.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/q/q.js":[function(require,module,exports){
 (function (process){
 // vim:ts=4:sts=4:sw=4:
 /*!
@@ -38194,7 +38194,7 @@ return Q;
 });
 
 }).call(this,require('_process'))
-},{"_process":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/browserify/node_modules/process/browser.js"}],"/home/gethernm/Desktop/TiDE-Z/client/node_modules/reqwest/reqwest.js":[function(require,module,exports){
+},{"_process":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/browserify/node_modules/process/browser.js"}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/reqwest/reqwest.js":[function(require,module,exports){
 /*!
   * Reqwest! A general purpose XHR connection manager
   * license MIT (c) Dustin Diaz 2014
@@ -38811,7 +38811,7 @@ return Q;
   return reqwest
 });
 
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/configuration.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/configuration.js":[function(require,module,exports){
 var configuration = {
   appApiUrl: 'https://api.trakit.io',
   dataApiUrl: 'https://data.trakit.io',
@@ -38828,7 +38828,7 @@ var configuration = {
 }
 
 module.exports = configuration;
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/leaderboard.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaderboard.js":[function(require,module,exports){
 var reqwest = require('reqwest');
 var $ = require('jquery');
 var _ = require('lodash');
@@ -38861,10 +38861,8 @@ var addUserInfoToPanel = function (user) {
 var generateTable = function(resp){
   var table =  $( "tbody" ); 
   resp.map(function(item){
-    var row =  '<tr>' +
-                  '<td>' + resp.asset.name + '</td>' +
-                  '<td>' + resp.distance +'</td>' +
-                '</tr>'
+    var distanceString = item.distance.toFixed(2);
+    var row =  '<tr>' + '<td>' + item.asset.name + '</td>' + '<td>' + item.asset.notes + '</td>'+ '<td>' + distanceString + '</td>' + '</tr>';
     table.append(row);
   });
 }
@@ -38885,7 +38883,7 @@ function init() {
 module.exports = {
   init: init
 };
-},{"../vendor/leaflet-search/leaflet-search":"/home/gethernm/Desktop/TiDE-Z/client/src/vendor/leaflet-search/leaflet-search.js","../vendor/leaflet.awesome-markers/leaflet.awesome-markers":"/home/gethernm/Desktop/TiDE-Z/client/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js","./leaflet/providers":"/home/gethernm/Desktop/TiDE-Z/client/src/js/leaflet/providers.js","./live-updater":"/home/gethernm/Desktop/TiDE-Z/client/src/js/live-updater.js","./loader":"/home/gethernm/Desktop/TiDE-Z/client/src/js/loader.js","./notifications/notifier":"/home/gethernm/Desktop/TiDE-Z/client/src/js/notifications/notifier.js","./resources/assets":"/home/gethernm/Desktop/TiDE-Z/client/src/js/resources/assets.js","./resources/survivor":"/home/gethernm/Desktop/TiDE-Z/client/src/js/resources/survivor.js","./util/awesome-marker-css-colors":"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/awesome-marker-css-colors.js","jquery":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/jquery/dist/jquery.js","leaflet":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/leaflet/dist/leaflet-src.js","lodash":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js","moment":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment/moment.js","moment-timezone":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment-timezone/index.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/leaflet/map.js":[function(require,module,exports){
+},{"../vendor/leaflet-search/leaflet-search":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet-search/leaflet-search.js","../vendor/leaflet.awesome-markers/leaflet.awesome-markers":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js","./leaflet/providers":"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/providers.js","./live-updater":"/home/gethernm/Desktop/TiDE-Z/web/src/js/live-updater.js","./loader":"/home/gethernm/Desktop/TiDE-Z/web/src/js/loader.js","./notifications/notifier":"/home/gethernm/Desktop/TiDE-Z/web/src/js/notifications/notifier.js","./resources/assets":"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/assets.js","./resources/survivor":"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/survivor.js","./util/awesome-marker-css-colors":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/awesome-marker-css-colors.js","jquery":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/jquery/dist/jquery.js","leaflet":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet/dist/leaflet-src.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js","moment":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment/moment.js","moment-timezone":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment-timezone/index.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/map.js":[function(require,module,exports){
 var L = require('leaflet');
 var providers = require('./providers');
 
@@ -38972,7 +38970,7 @@ var map = {
   }
 }
 module.exports = map;
-},{"./providers":"/home/gethernm/Desktop/TiDE-Z/client/src/js/leaflet/providers.js","leaflet":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/leaflet/dist/leaflet-src.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/leaflet/providers.js":[function(require,module,exports){
+},{"./providers":"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/providers.js","leaflet":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet/dist/leaflet-src.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/providers.js":[function(require,module,exports){
 var L = require('leaflet');
 
 // require the heatmap plugin, which we can set up later
@@ -39073,7 +39071,7 @@ module.exports = {
   clouds: noaaClouds,
   heatMap: heat
 }
-},{"leaflet":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/leaflet/dist/leaflet-src.js","leaflet-plugins/layer/tile/Google":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/leaflet-plugins/layer/tile/Google.js","leaflet.heat":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/leaflet.heat/dist/leaflet-heat.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/live-updater.js":[function(require,module,exports){
+},{"leaflet":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet/dist/leaflet-src.js","leaflet-plugins/layer/tile/Google":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet-plugins/layer/tile/Google.js","leaflet.heat":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet.heat/dist/leaflet-heat.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/live-updater.js":[function(require,module,exports){
 // EXAMPLE USAGE
 //
 // var liveUpdater = require('./live-updater');
@@ -39213,7 +39211,7 @@ var liveUpdater = {
 
 module.exports = liveUpdater;
 
-},{"./resources/assets":"/home/gethernm/Desktop/TiDE-Z/client/src/js/resources/assets.js","./util/progress-indicator":"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/progress-indicator.js","lodash":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/loader.js":[function(require,module,exports){
+},{"./resources/assets":"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/assets.js","./util/progress-indicator":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/progress-indicator.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/loader.js":[function(require,module,exports){
 $ = require('jquery');
 
 function showLoader() {
@@ -39228,7 +39226,7 @@ module.exports = {
   hide: hideLoader,
   show: showLoader
 }
-},{"jquery":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/jquery/dist/jquery.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/map-live.js":[function(require,module,exports){
+},{"jquery":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/jquery/dist/jquery.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/map-live.js":[function(require,module,exports){
 var reqwest = require('reqwest');
 var $ = require('jquery');
 var _ = require('lodash');
@@ -39478,7 +39476,7 @@ function init() {
 module.exports = {
   init: init
 };
-},{"../vendor/leaflet-search/leaflet-search":"/home/gethernm/Desktop/TiDE-Z/client/src/vendor/leaflet-search/leaflet-search.js","../vendor/leaflet.awesome-markers/leaflet.awesome-markers":"/home/gethernm/Desktop/TiDE-Z/client/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js","./leaflet/map":"/home/gethernm/Desktop/TiDE-Z/client/src/js/leaflet/map.js","./leaflet/providers":"/home/gethernm/Desktop/TiDE-Z/client/src/js/leaflet/providers.js","./live-updater":"/home/gethernm/Desktop/TiDE-Z/client/src/js/live-updater.js","./loader":"/home/gethernm/Desktop/TiDE-Z/client/src/js/loader.js","./notifications/notifier":"/home/gethernm/Desktop/TiDE-Z/client/src/js/notifications/notifier.js","./resources/assets":"/home/gethernm/Desktop/TiDE-Z/client/src/js/resources/assets.js","./resources/geofences":"/home/gethernm/Desktop/TiDE-Z/client/src/js/resources/geofences.js","./resources/landmarks":"/home/gethernm/Desktop/TiDE-Z/client/src/js/resources/landmarks.js","./util/awesome-marker-css-colors":"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/awesome-marker-css-colors.js","jquery":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/jquery/dist/jquery.js","leaflet":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/leaflet/dist/leaflet-src.js","lodash":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js","moment":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment/moment.js","moment-timezone":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment-timezone/index.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/notifications/notifier.js":[function(require,module,exports){
+},{"../vendor/leaflet-search/leaflet-search":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet-search/leaflet-search.js","../vendor/leaflet.awesome-markers/leaflet.awesome-markers":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js","./leaflet/map":"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/map.js","./leaflet/providers":"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/providers.js","./live-updater":"/home/gethernm/Desktop/TiDE-Z/web/src/js/live-updater.js","./loader":"/home/gethernm/Desktop/TiDE-Z/web/src/js/loader.js","./notifications/notifier":"/home/gethernm/Desktop/TiDE-Z/web/src/js/notifications/notifier.js","./resources/assets":"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/assets.js","./resources/geofences":"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/geofences.js","./resources/landmarks":"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/landmarks.js","./util/awesome-marker-css-colors":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/awesome-marker-css-colors.js","jquery":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/jquery/dist/jquery.js","leaflet":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet/dist/leaflet-src.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js","moment":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment/moment.js","moment-timezone":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment-timezone/index.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/notifications/notifier.js":[function(require,module,exports){
 var notify = require('../../vendor/bootstrap-notify');
 var $ = require('jquery');
 var moment = require('moment');
@@ -39605,7 +39603,7 @@ var Notifier = {
 }
 
 module.exports = Notifier;
-},{"../../vendor/bootstrap-notify":"/home/gethernm/Desktop/TiDE-Z/client/src/vendor/bootstrap-notify.js","../util/Options":"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/Options.js","jquery":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/jquery/dist/jquery.js","lodash":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js","moment":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/moment/moment.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/resources/assets.js":[function(require,module,exports){
+},{"../../vendor/bootstrap-notify":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/bootstrap-notify.js","../util/Options":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/Options.js","jquery":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/jquery/dist/jquery.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js","moment":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment/moment.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/assets.js":[function(require,module,exports){
 var reqwest = require('reqwest');
 var config = require('../configuration');
 var Q = require('q');
@@ -39737,7 +39735,7 @@ module.exports = {
   getAll: getAllAssets,
   getUpdates: getUpdates
 }
-},{"../configuration":"/home/gethernm/Desktop/TiDE-Z/client/src/js/configuration.js","../util/Options":"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/Options.js","lodash":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js","q":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/q/q.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/resources/geofences.js":[function(require,module,exports){
+},{"../configuration":"/home/gethernm/Desktop/TiDE-Z/web/src/js/configuration.js","../util/Options":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/Options.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js","q":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/q/q.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/geofences.js":[function(require,module,exports){
 var reqwest = require('reqwest');
 var config = require('../configuration');
 var Q = require('q');
@@ -39910,7 +39908,7 @@ module.exports = {
     update: updateGeofence,
     createOrUpdate: createOrUpdateGeofence
 }
-},{"../configuration":"/home/gethernm/Desktop/TiDE-Z/client/src/js/configuration.js","../leaflet/map":"/home/gethernm/Desktop/TiDE-Z/client/src/js/leaflet/map.js","../util/Options":"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/Options.js","lodash":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js","q":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/q/q.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/resources/landmarks.js":[function(require,module,exports){
+},{"../configuration":"/home/gethernm/Desktop/TiDE-Z/web/src/js/configuration.js","../leaflet/map":"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/map.js","../util/Options":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/Options.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js","q":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/q/q.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/landmarks.js":[function(require,module,exports){
 var reqwest = require('reqwest');
 var config = require('../configuration');
 var Q = require('q');
@@ -40033,7 +40031,7 @@ module.exports = {
     update: updateLandmark,
     createOrUpdate: createOrUpdateLandmark
 }
-},{"../../vendor/leaflet.awesome-markers/leaflet.awesome-markers":"/home/gethernm/Desktop/TiDE-Z/client/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js","../configuration":"/home/gethernm/Desktop/TiDE-Z/client/src/js/configuration.js","../leaflet/map":"/home/gethernm/Desktop/TiDE-Z/client/src/js/leaflet/map.js","../util/Options":"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/Options.js","leaflet":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/leaflet/dist/leaflet-src.js","lodash":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js","q":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/q/q.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/resources/survivor.js":[function(require,module,exports){
+},{"../../vendor/leaflet.awesome-markers/leaflet.awesome-markers":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js","../configuration":"/home/gethernm/Desktop/TiDE-Z/web/src/js/configuration.js","../leaflet/map":"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/map.js","../util/Options":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/Options.js","leaflet":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet/dist/leaflet-src.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js","q":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/q/q.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/survivor.js":[function(require,module,exports){
 var reqwest = require('reqwest');
 var config = require('../configuration');
 var Q = require('q');
@@ -40074,7 +40072,7 @@ module.exports = {
   getLeaderBoard: getLeaderBoard,
   getAllSurvivors: getAllSurvivors
 }
-},{"../configuration":"/home/gethernm/Desktop/TiDE-Z/client/src/js/configuration.js","../util/Options":"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/Options.js","lodash":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js","q":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/q/q.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/Options.js":[function(require,module,exports){
+},{"../configuration":"/home/gethernm/Desktop/TiDE-Z/web/src/js/configuration.js","../util/Options":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/Options.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js","q":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/q/q.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/Options.js":[function(require,module,exports){
 var _ = require('lodash');
 
 var Options = function(options) {
@@ -40102,7 +40100,7 @@ Options.prototype.require = function(requiredAttrs) {
 }
 
 module.exports = Options;
-},{"lodash":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/lodash/index.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/awesome-marker-css-colors.js":[function(require,module,exports){
+},{"lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/awesome-marker-css-colors.js":[function(require,module,exports){
 module.exports = {
     red: 'D63E2A',
     orange: 'F69730',
@@ -40124,7 +40122,7 @@ module.exports = {
     gray: '575757',
     black: '303030'
 }
-},{}],"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/progress-indicator.js":[function(require,module,exports){
+},{}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/progress-indicator.js":[function(require,module,exports){
 var $ = require('jquery');
 var ProgressBar = require('progressbar.js');
 var Options = require('./Options');
@@ -40176,7 +40174,7 @@ var progress = {
 
 module.exports = progress;
 
-},{"./Options":"/home/gethernm/Desktop/TiDE-Z/client/src/js/util/Options.js","jquery":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/jquery/dist/jquery.js","progressbar.js":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/progressbar.js/src/main.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/vendor/bootstrap-notify.js":[function(require,module,exports){
+},{"./Options":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/Options.js","jquery":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/jquery/dist/jquery.js","progressbar.js":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/progressbar.js/src/main.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/bootstrap-notify.js":[function(require,module,exports){
 /* 
 * Project: Bootstrap Notify = v3.0.0
 * Description: Turns standard Bootstrap alerts into "Growl-like" notifications.
@@ -40510,7 +40508,7 @@ module.exports = progress;
 	};
 
 }));
-},{"jquery":"/home/gethernm/Desktop/TiDE-Z/client/node_modules/jquery/dist/jquery.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/vendor/leaflet-search/leaflet-search.js":[function(require,module,exports){
+},{"jquery":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/jquery/dist/jquery.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet-search/leaflet-search.js":[function(require,module,exports){
 var leafletAwesomeMarkers = require('../leaflet.awesome-markers/leaflet.awesome-markers');
 L.Icon.Default.imagePath = '../../../node_modules/leaflet/dist/images/';
 /* 
@@ -41428,7 +41426,7 @@ L.control.search = function (options) {
 }).call(this);
 
 
-},{"../leaflet.awesome-markers/leaflet.awesome-markers":"/home/gethernm/Desktop/TiDE-Z/client/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js"}],"/home/gethernm/Desktop/TiDE-Z/client/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js":[function(require,module,exports){
+},{"../leaflet.awesome-markers/leaflet.awesome-markers":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js":[function(require,module,exports){
 /*
   Leaflet.AwesomeMarkers, a plugin that adds colorful iconic markers for Leaflet, based on the Font Awesome icons
   (c) 2012-2013, Lennard Voogdt
