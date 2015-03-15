@@ -15,6 +15,7 @@ import (
 	"strconv"
 	"time"
 	"zombies/assets"
+	"zombies/client"
 	"zombies/config"
 	"zombies/events"
 	"zombies/messages"
@@ -53,12 +54,17 @@ func main() {
 	router := httprouter.New()
 	router.POST("/survivors", createSurvivor)
 	router.GET("/survivors", leaderboard)
+	router.Handle("OPTIONS", "/survivors", leaderboard)
+
 	log.Fatal(http.ListenAndServe(":3000", router))
 }
 
 func createSurvivor(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	decoder := json.NewDecoder(r.Body)
+	config, _ := config.Read()
+
 	var survivor assets.Asset
+	var c chan messages.Survivor = make(chan messages.Survivor)
 
 	err := decoder.Decode(&survivor)
 	if err != nil {
@@ -69,7 +75,26 @@ func createSurvivor(w http.ResponseWriter, r *http.Request, _ httprouter.Params)
 	data.assets = append(data.assets, createdAsset)
 
 	player := Player{Id: createdAsset.Id, Asset: createdAsset, Lat: 36.131, Lng: -115.151, Alive: true}
+	go client.Create_New_Survivor(34.05, -118.25, player.Lat, player.Lng, 0, createdAsset.DeviceAddress, config.Token, &data.pubKey, c)
 	data.players = append(data.players, player)
+	go monitorSurvivorLocations(c)
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Add("Access-Control-Allow-Methods", "POST, HEAD, OPTIONS")
+	w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
+	w.Header().Add("Access-Control-Allow-Headers", "X-Auth-Token")
+}
+
+func monitorSurvivorLocations(c chan messages.Survivor) {
+	for {
+		survivor := <-c
+		for i, player := range data.players {
+			if survivor.Asset_id == player.Asset.DeviceAddress {
+				data.players[i].Lat = survivor.Lat
+				data.players[i].Lng = survivor.Lng
+				break
+			}
+		}
+	}
 }
 
 func leaderboard(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
@@ -84,6 +109,10 @@ func leaderboard(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	playersJson, _ := json.Marshal(data.players)
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+	w.Header().Set("Access-Control-Allow-Headers",
+		"Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, X-Auth-Token, Authorization")
 	w.Write(playersJson)
 }
 
@@ -106,6 +135,8 @@ func createAsset(asset assets.Asset) assets.Asset {
 	data.deviceAddress++
 	asset.DeviceAddress = strconv.Itoa(data.deviceAddress)
 	asset.Group = "survivors"
+	asset.Icon = "user"
+	asset.Color = "red"
 	asset.Id = assets.Create(asset)
 	return asset
 }

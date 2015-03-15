@@ -2,23 +2,14 @@ package client
 
 import (
 	//"fmt"
-	"crypto/ecdsa"
+	"crypto"
 	"fmt"
 	"math/rand"
 	"time"
 	"zombies/messages"
 )
 
-// type Survivor struct {
-// 	x        float64
-// 	y        float64
-// 	goalx    float64
-// 	goaly    float64
-// 	asset_id string
-// 	alive    bool
-// }
-
-func RecvMsgThread(survivor messages.Survivor, starttime int, token string, pubkey *ecdsa.PublicKey) {
+func RecvMsgThread(survivor messages.Survivor, starttime int, token string, pubkey *crypto.PublicKey) {
 	for starttime > time.Now().Second() {
 		time.Sleep(5 * time.Second)
 	}
@@ -33,41 +24,40 @@ func RecvMsgThread(survivor messages.Survivor, starttime int, token string, pubk
 	}
 }
 
-func SendMsgThread(survivor messages.Survivor, starttime int, token string) {
+func SendMsgThread(survivor messages.Survivor, starttime int, token string, c chan messages.Survivor) {
 	for starttime > time.Now().Second() {
 		time.Sleep(5 * time.Second)
 	}
 
 	for survivor.Alive == true {
-		messages.CreateTiMsg(survivor, token)
+		survivor = messages.CreateTiMsg(survivor, token, c)
 		time.Sleep(5 * time.Second)
 		fmt.Println("sending data")
 	}
 
 	//post the initial fence
-	fenceid := messages.PostGeoFenceMessage(survivor.Asset_id, survivor.X, survivor.Y, token)
+	fenceid := messages.PostGeoFenceMessage(survivor.Asset_id, survivor.Lat, survivor.Lng, token)
 	//put, move random fences
 	for survivor.Alive == false {
-		survivor.X += (rand.Float64()*2.0 - 1.0) * .00032
-		survivor.Y += (rand.Float64()*2.0 - 1.0) * .00032
-		messages.PutGeoFenceMessage(survivor.Asset_id, survivor.X, survivor.Y, token, fenceid)
-		messages.CreateTiMsg(survivor, token)
+		survivor.Lat += (rand.Float64()*2.0 - 1.0) * .00032
+		survivor.Lng += (rand.Float64()*2.0 - 1.0) * .00032
+		messages.PutGeoFenceMessage(survivor.Asset_id, survivor.Lat, survivor.Lng, token, fenceid)
+		messages.CreateTiMsg(survivor, token, c)
 		time.Sleep(5 * time.Second)
 		fmt.Println("sending fence data")
 	}
 
 }
 
-func Create_New_Survivor(goalx float64, goaly float64, initialx float64, initialy float64, starttime int, asset_id string, token string, pubkey *ecdsa.PublicKey) {
+func Create_New_Survivor(goalLat float64, goalLng float64, initialLat float64, initialLng float64, starttime int, asset_id string, token string, pubkey *crypto.PublicKey, c chan messages.Survivor) {
 	survivor := messages.Survivor{}
 	survivor.Asset_id = asset_id
 	survivor.Alive = true
-	survivor.X = initialx
-	survivor.Y = initialy
-	survivor.Goalx = goalx
-	survivor.Goaly = goaly
+	survivor.Lat = initialLat
+	survivor.Lng = initialLng
+	survivor.GoalLat = goalLat
+	survivor.GoalLng = goalLng
 
-	RecvMsgThread(survivor, starttime, token, pubkey)
-	SendMsgThread(survivor, starttime, token)
-
+	// go RecvMsgThread(survivor, starttime, token, pubkey)
+	go SendMsgThread(survivor, starttime, token, c)
 }

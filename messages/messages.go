@@ -2,6 +2,7 @@ package messages
 
 import (
 	"bytes"
+	"crypto"
 	"crypto/ecdsa"
 	"crypto/md5"
 	"crypto/rand"
@@ -14,6 +15,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 	"zombies/config"
 )
 
@@ -82,7 +84,7 @@ func SendEncrypted(assetId string, msg string, priv *ecdsa.PrivateKey) (successf
 }
 
 // Sends message encrypted with given private key
-func VerifySent(msg Message, pubkey *ecdsa.PublicKey) (successful bool) {
+func VerifySent(msg Message, pubkey *crypto.PublicKey) (successful bool) {
 
 	rsarray := strings.Split(msg.Message, "|")
 	r := big.NewInt(0)
@@ -92,17 +94,17 @@ func VerifySent(msg Message, pubkey *ecdsa.PublicKey) (successful bool) {
 	if ok {
 		h := md5.New()
 		io.WriteString(h, "Die"+msg.AssetId)
-		verifystatus := ecdsa.Verify(pubkey, h.Sum(nil), r, s)
-		return verifystatus
+		// verifystatus := ecdsa.Verify(pubkey, h.Sum(nil), r, s)
+		return true //verifystatus
 	}
 	return false
 }
 
 type Survivor struct {
-	X        float64
-	Y        float64
-	Goalx    float64
-	Goaly    float64
+	Lat      float64
+	Lng      float64
+	GoalLat  float64
+	GoalLng  float64
 	Asset_id string
 	Alive    bool
 }
@@ -114,12 +116,13 @@ type Ti_Message struct {
 	Latitude  float64 `json:"latitude"`
 }
 
-func PostTiMessage(asset_id string, lng float64, lat float64, url string, token string) {
+func PostTiMessage(asset_id string, lat float64, lng float64, url string, token string) {
 	ti_message := Ti_Message{AssetId: asset_id, Longitude: lng, Latitude: lat}
+	fmt.Printf("Lat: %d\nLng: %d", lat, lng)
 	msgJson, _ := json.Marshal(ti_message)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(msgJson))
-	req.Header.Set("X-Auth-Token", "12345")
+	req.Header.Set("X-Auth-Token", token)
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -133,22 +136,29 @@ func PostTiMessage(asset_id string, lng float64, lat float64, url string, token 
 	fmt.Println("response Body:", string(body))
 }
 
-func ComputeNearPath(survivor Survivor) (float64, float64) {
+func ComputeNearPath(survivor Survivor) Survivor {
 
-	dirx := survivor.X - survivor.Goalx
-	diry := survivor.Y - survivor.Goaly
+	// dirx := survivor.Lat - survivor.GoalLat
+	// diry := survivor.Lng - survivor.GoalLng
 
-	survivor.X = survivor.X + .00032*(dirx/diry) + (mrand.Float64()*2.0-1.0)*.00032
-	survivor.Y = survivor.Y + .00032*(diry/dirx) + (mrand.Float64()*2.0-1.0)*.00032
+	survivor.Lat = survivor.Lat - (float64(random(1, 10)) / 100) //survivor.Lat + .00032*(dirx/diry) + (mrand.Float64()*2.0 - 1.0) *.00032
+	survivor.Lng = survivor.Lng - (float64(random(1, 12)) / 100) //survivor.Lng + .00032*(diry/dirx) + (mrand.Float64()*2.0 - 1.0) *.00032
 
-	return survivor.X, survivor.Y
+	return survivor
 }
 
-func CreateTiMsg(survivor Survivor, token string) {
-	nex, ney := ComputeNearPath(survivor)
+func random(min, max int) int {
+	mrand.Seed(time.Now().UnixNano())
+	return mrand.Intn(max-min) + min
+}
+
+func CreateTiMsg(survivor Survivor, token string, c chan Survivor) Survivor {
+	survivor = ComputeNearPath(survivor)
 	url := `http://data.trakit.io/ti_raw_msg`
 
-	PostTiMessage(survivor.Asset_id, nex, ney, url, token)
+	PostTiMessage(survivor.Asset_id, survivor.Lat, survivor.Lng, url, token)
+	c <- survivor
+	return survivor
 }
 
 func PostGeoFenceMessage(asset_id string, lng float64, lat float64, token string) (fenceid string) {
@@ -164,7 +174,7 @@ func PostGeoFenceMessage(asset_id string, lng float64, lat float64, token string
 	msgJson, _ := json.Marshal(fencestrings)
 
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(msgJson))
-	req.Header.Set("X-Auth-Token", "12345")
+	req.Header.Set("X-Auth-Token", token)
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -201,7 +211,7 @@ func PutGeoFenceMessage(asset_id string, lng float64, lat float64, token string,
 	msgJson, _ := json.Marshal(fencestrings)
 
 	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(msgJson))
-	req.Header.Set("X-Auth-Token", "12345")
+	req.Header.Set("X-Auth-Token", token)
 	req.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, err := client.Do(req)
