@@ -25,7 +25,7 @@ $(document).ready(function() {
 	userToggle.on('click', function (e) {
 		e.preventDefault();
 		userToggle.animate({
-		    bottom: panelHeight
+		    bottom: panelHeight += 31
 		  });
 		toggleIcon.addClass('fa-rotate-180');
 		$('#user-panel').slideToggle(function(){

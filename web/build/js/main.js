@@ -26,7 +26,7 @@ $(document).ready(function() {
 	userToggle.on('click', function (e) {
 		e.preventDefault();
 		userToggle.animate({
-		    bottom: panelHeight
+		    bottom: panelHeight += 31
 		  });
 		toggleIcon.addClass('fa-rotate-180');
 		$('#user-panel').slideToggle(function(){
@@ -30141,7 +30141,7 @@ L.Map.include({
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment-timezone/data/packed/latest.json":[function(require,module,exports){
-module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
+module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports=module.exports={
 	"version": "2014j",
 	"zones": [
 		"Africa/Abidjan|LMT GMT|g.8 0|01|-2ldXH.Q",
@@ -38838,8 +38838,6 @@ require('moment-timezone');
 var loader = require('./loader');
 var providers = require('./leaflet/providers');
 var leafletAwesomeMarkers = require('../vendor/leaflet.awesome-markers/leaflet.awesome-markers');
-var liveUpdater = require('./live-updater');
-var Assets = require('./resources/assets');
 var Survivor = require('./resources/survivor');
 var Notifier = require('./notifications/notifier');
 var awesomeMarkerColors = require('./util/awesome-marker-css-colors');
@@ -38862,7 +38860,7 @@ var generateTable = function(resp){
   var table =  $( "tbody" ); 
   resp.map(function(item){
     var distanceString = item.distance.toFixed(2);
-    var row =  '<tr>' + '<td>' + item.asset.name + '</td>' + '<td>' + item.asset.notes + '</td>'+ '<td>' + distanceString + '</td>' + '</tr>';
+    var row =  '<tr>' + '<td>' + item.asset.name + '</td>' + '<td>' + item.asset.notes + '</td>'+ '<td>' + distanceString + 'mi. </td>' + '</tr>';
     table.append(row);
   });
 }
@@ -38873,7 +38871,6 @@ function init() {
   .then(function(result) {
     loader.hide();
     generateTable(result);
-    liveUpdater.start({tiid: result.maxTiid});
   }, function(error) {
     console.log('Error retrieving assets: ', error);
   });
@@ -38883,7 +38880,7 @@ function init() {
 module.exports = {
   init: init
 };
-},{"../vendor/leaflet-search/leaflet-search":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet-search/leaflet-search.js","../vendor/leaflet.awesome-markers/leaflet.awesome-markers":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js","./leaflet/providers":"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/providers.js","./live-updater":"/home/gethernm/Desktop/TiDE-Z/web/src/js/live-updater.js","./loader":"/home/gethernm/Desktop/TiDE-Z/web/src/js/loader.js","./notifications/notifier":"/home/gethernm/Desktop/TiDE-Z/web/src/js/notifications/notifier.js","./resources/assets":"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/assets.js","./resources/survivor":"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/survivor.js","./util/awesome-marker-css-colors":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/awesome-marker-css-colors.js","jquery":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/jquery/dist/jquery.js","leaflet":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet/dist/leaflet-src.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js","moment":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment/moment.js","moment-timezone":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment-timezone/index.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/map.js":[function(require,module,exports){
+},{"../vendor/leaflet-search/leaflet-search":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet-search/leaflet-search.js","../vendor/leaflet.awesome-markers/leaflet.awesome-markers":"/home/gethernm/Desktop/TiDE-Z/web/src/vendor/leaflet.awesome-markers/leaflet.awesome-markers.js","./leaflet/providers":"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/providers.js","./loader":"/home/gethernm/Desktop/TiDE-Z/web/src/js/loader.js","./notifications/notifier":"/home/gethernm/Desktop/TiDE-Z/web/src/js/notifications/notifier.js","./resources/survivor":"/home/gethernm/Desktop/TiDE-Z/web/src/js/resources/survivor.js","./util/awesome-marker-css-colors":"/home/gethernm/Desktop/TiDE-Z/web/src/js/util/awesome-marker-css-colors.js","jquery":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/jquery/dist/jquery.js","leaflet":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/leaflet/dist/leaflet-src.js","lodash":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/lodash/index.js","moment":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment/moment.js","moment-timezone":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/moment-timezone/index.js","reqwest":"/home/gethernm/Desktop/TiDE-Z/web/node_modules/reqwest/reqwest.js"}],"/home/gethernm/Desktop/TiDE-Z/web/src/js/leaflet/map.js":[function(require,module,exports){
 var L = require('leaflet');
 var providers = require('./providers');
 

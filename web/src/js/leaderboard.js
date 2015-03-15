@@ -7,8 +7,6 @@ require('moment-timezone');
 var loader = require('./loader');
 var providers = require('./leaflet/providers');
 var leafletAwesomeMarkers = require('../vendor/leaflet.awesome-markers/leaflet.awesome-markers');
-var liveUpdater = require('./live-updater');
-var Assets = require('./resources/assets');
 var Survivor = require('./resources/survivor');
 var Notifier = require('./notifications/notifier');
 var awesomeMarkerColors = require('./util/awesome-marker-css-colors');
@@ -31,7 +29,7 @@ var generateTable = function(resp){
   var table =  $( "tbody" ); 
   resp.map(function(item){
     var distanceString = item.distance.toFixed(2);
-    var row =  '<tr>' + '<td>' + item.asset.name + '</td>' + '<td>' + item.asset.notes + '</td>'+ '<td>' + distanceString + '</td>' + '</tr>';
+    var row =  '<tr>' + '<td>' + item.asset.name + '</td>' + '<td>' + item.asset.notes + '</td>'+ '<td>' + distanceString + 'mi. </td>' + '</tr>';
     table.append(row);
   });
 }
@@ -42,7 +40,6 @@ function init() {
   .then(function(result) {
     loader.hide();
     generateTable(result);
-    liveUpdater.start({tiid: result.maxTiid});
   }, function(error) {
     console.log('Error retrieving assets: ', error);
   });

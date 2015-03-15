@@ -719,14 +719,21 @@ footer {
   width: 100%; }
 
 .tab {
+  border-top-right-radius: 5px;
+  border-top-left-radius: 5px;
+  border: 1px solid #9F9F9F;
+  border-bottom: 0px;
   display: inline-block;
   position: absolute;
   bottom: 0px;
   right: 15px;
-  height: 30px;
+  height: 40px;
   background: white;
   width: 110px;
-  z-index: 1560; }
+  z-index: 1550;
+  padding-left: 19px; }
+  .tab i {
+    padding: 10px; }
 
 .user-panel {
   -webkit-transform-style: preserve-3d;
