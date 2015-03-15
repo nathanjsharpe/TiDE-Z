@@ -16,7 +16,7 @@ type Event struct {
 }
 
 // Gets all events
-func GetAll(assetId string) (events *[]Event) {
+func GetAll() (events *[]Event) {
 	client := &http.Client{}
 	config, _ := config.Read()
 

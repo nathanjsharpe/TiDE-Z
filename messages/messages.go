@@ -13,7 +13,7 @@ import (
 )
 
 type Message struct {
-	Tiid      int    `json:"id,omitempty"`
+	Tiid      int    `json:"id"`
 	AssetId   string `json:"asset_id"`
 	Timestamp string `json:"timestamp"`
 	Message   string `json:"message"`
@@ -27,7 +27,7 @@ func Send(assetId string, msg string) (successful bool) {
 	client := &http.Client{}
 	config, _ := config.Read()
 
-	message := Message{AssetId: assetId, Message: msg, Sender: "Dude"}
+	message := Message{AssetId: assetId, Message: msg, Sender: "Ash"}
 	msgJson, _ := json.Marshal(message)
 
 	req, _ := http.NewRequest("POST", "https://api.trakit.io/message", bytes.NewBuffer(msgJson))
