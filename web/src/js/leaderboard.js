@@ -7,11 +7,12 @@ require('moment-timezone');
 var loader = require('./loader');
 var providers = require('./leaflet/providers');
 var leafletAwesomeMarkers = require('../vendor/leaflet.awesome-markers/leaflet.awesome-markers');
-var liveUpdater = require('./live-updater');
 var Assets = require('./resources/assets');
 var Survivor = require('./resources/survivor');
 var Notifier = require('./notifications/notifier');
 var awesomeMarkerColors = require('./util/awesome-marker-css-colors');
+var leaderboardTemplate = require('./templates/leaderboard');
+var Handlebars = require('handlebars');
 
 var search = require('../vendor/leaflet-search/leaflet-search');
 
@@ -22,31 +23,45 @@ var serverFailure = function (resp) {
     });
 }
 
+Handlebars.registerHelper("inc", function(value, options) {
+    return parseInt(value) + 1;
+});
+
+Handlebars.registerHelper("distance", function(distance, options)
+{
+    return parseFloat(distance).toFixed(2);
+});
+
+var template;
+
 var addUserInfoToPanel = function (user) {
   $( "#user-panel" ).find('.name').text(user.properties.name);
   $( "#user-panel" ).find('.score').text(user.properties.data.event);
 }
 
 var generateTable = function(resp){
-  var table =  $( "tbody" ); 
-  resp.map(function(item){
-    var distanceString = item.distance.toFixed(2);
-    var row =  '<tr>' + '<td>' + item.asset.name + '</td>' + '<td>' + item.asset.notes + '</td>'+ '<td>' + distanceString + '</td>' + '</tr>';
-    table.append(row);
-  });
+  var context = { survivors: resp }
+  var html = template(context);
+  $('table tbody').html(html);
+}
+
+function setupNext(interval) {
+  window.setTimeout(function() {
+    Survivor.getLeaderBoard()
+    .then(function(result) {
+      loader.hide();
+      generateTable(result);
+      setupNext(1500);
+    }, function(error) {
+      console.log('Error retrieving assets: ', error);
+    });
+  }, interval)
 }
 
 function init() {
   loader.show();
-  Survivor.getLeaderBoard()
-  .then(function(result) {
-    loader.hide();
-    generateTable(result);
-    liveUpdater.start({tiid: result.maxTiid});
-  }, function(error) {
-    console.log('Error retrieving assets: ', error);
-  });
-
+  template = Handlebars.compile(leaderboardTemplate);
+  setupNext(10);
 }
 
 module.exports = {
