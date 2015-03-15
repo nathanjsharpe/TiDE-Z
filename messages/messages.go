@@ -6,9 +6,14 @@ import (
 	"crypto/md5"
 	"crypto/rand"
 	"encoding/json"
+	"fmt"
 	"io"
 	"io/ioutil"
+	"math/big"
+	mrand "math/rand"
 	"net/http"
+	"strconv"
+	"strings"
 	"zombies/config"
 )
 
@@ -74,4 +79,138 @@ func SendEncrypted(assetId string, msg string, priv *ecdsa.PrivateKey) (successf
 	r, s, _ := ecdsa.Sign(rand.Reader, priv, h.Sum(nil))
 
 	return Send(assetId, r.String()+"|"+s.String())
+}
+
+// Sends message encrypted with given private key
+func VerifySent(msg Message, pubkey *ecdsa.PublicKey) (successful bool) {
+
+	rsarray := strings.Split(msg.Message, "|")
+	r := big.NewInt(0)
+	s := big.NewInt(0)
+	_, ok := r.SetString(rsarray[0], 10)
+	_, ok = s.SetString(rsarray[1], 10)
+	if ok {
+		h := md5.New()
+		io.WriteString(h, "Die"+msg.AssetId)
+		verifystatus := ecdsa.Verify(pubkey, h.Sum(nil), r, s)
+		return verifystatus
+	}
+	return false
+}
+
+type Survivor struct {
+	X        float64
+	Y        float64
+	Goalx    float64
+	Goaly    float64
+	Asset_id string
+	Alive    bool
+}
+
+type Ti_Message struct {
+	AssetId string `json:"asset_id"`
+	// Timestamp string `json:"timestamp"`
+	Longitude float64 `json:"longitude"`
+	Latitude  float64 `json:"latitude"`
+}
+
+func PostTiMessage(asset_id string, lng float64, lat float64, url string, token string) {
+	ti_message := Ti_Message{AssetId: asset_id, Longitude: lng, Latitude: lat}
+	msgJson, _ := json.Marshal(ti_message)
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(msgJson))
+	req.Header.Set("X-Auth-Token", "12345")
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("response Body:", string(body))
+}
+
+func ComputeNearPath(survivor Survivor) (float64, float64) {
+
+	dirx := survivor.X - survivor.Goalx
+	diry := survivor.Y - survivor.Goaly
+
+	survivor.X = survivor.X + .00032*(dirx/diry) + (mrand.Float64()*2.0-1.0)*.00032
+	survivor.Y = survivor.Y + .00032*(diry/dirx) + (mrand.Float64()*2.0-1.0)*.00032
+
+	return survivor.X, survivor.Y
+}
+
+func CreateTiMsg(survivor Survivor, token string) {
+	nex, ney := ComputeNearPath(survivor)
+	url := `http://data.trakit.io/ti_raw_msg`
+
+	PostTiMessage(survivor.Asset_id, nex, ney, url, token)
+}
+
+func PostGeoFenceMessage(asset_id string, lng float64, lat float64, token string) (fenceid string) {
+	url := `http://data.trakit.io/geoFence`
+	var fencestrings = `{"name": "`
+	fencestrings += asset_id
+	fencestrings += `","description":"","inclusive": "true", "asset_ids": [ "*"],"geometry": {"coordinates": [[`
+	fencestrings += strconv.FormatFloat((lat+.00032), 'f', 6, 64) + "," + strconv.FormatFloat((lng+.00032), 'f', 6, 64) + "],["
+	fencestrings += strconv.FormatFloat((lat+.00032), 'f', 6, 64) + "," + strconv.FormatFloat((lng+.00032), 'f', 6, 64) + "],["
+	fencestrings += strconv.FormatFloat((lat+.00032), 'f', 6, 64) + "," + strconv.FormatFloat((lng+.00032), 'f', 6, 64) + "],["
+	fencestrings += strconv.FormatFloat((lat+.00032), 'f', 6, 64) + "," + strconv.FormatFloat((lng+.00032), 'f', 6, 64) + "]],"
+	fencestrings += `"type": "MultiPoint"}}`
+	msgJson, _ := json.Marshal(fencestrings)
+
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(msgJson))
+	req.Header.Set("X-Auth-Token", "12345")
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	var objmap map[string]*json.RawMessage
+	err = json.Unmarshal(body, &objmap)
+
+	var idstr string
+	err = json.Unmarshal(*objmap["id"], &idstr)
+	fenceid = idstr
+	fmt.Println("response Body:", string(body))
+
+	return fenceid
+}
+
+func PutGeoFenceMessage(asset_id string, lng float64, lat float64, token string, fenceid string) {
+	url := `http://data.trakit.io/geoFence`
+	var fencestrings = "{\"id\":" + fenceid
+	fencestrings += `,"name": "` + asset_id
+	fencestrings += `","description":"","inclusive": "true", "asset_ids": [ "*"],"geometry": {"coordinates": [[`
+	fencestrings += strconv.FormatFloat((lat+.00032), 'f', 6, 64) + "," + strconv.FormatFloat((lng+.00032), 'f', 6, 64) + "],["
+	fencestrings += strconv.FormatFloat((lat+.00032), 'f', 6, 64) + "," + strconv.FormatFloat((lng+.00032), 'f', 6, 64) + "],["
+	fencestrings += strconv.FormatFloat((lat+.00032), 'f', 6, 64) + "," + strconv.FormatFloat((lng+.00032), 'f', 6, 64) + "],["
+	fencestrings += strconv.FormatFloat((lat+.00032), 'f', 6, 64) + "," + strconv.FormatFloat((lng+.00032), 'f', 6, 64) + "]],"
+	fencestrings += `"type": "MultiPoint"}}`
+
+	msgJson, _ := json.Marshal(fencestrings)
+
+	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(msgJson))
+	req.Header.Set("X-Auth-Token", "12345")
+	req.Header.Set("Content-Type", "application/json")
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	fmt.Println("response Status:", resp.Status)
+	fmt.Println("response Headers:", resp.Header)
+	body, _ := ioutil.ReadAll(resp.Body)
+	fmt.Println("response Body:", string(body))
 }

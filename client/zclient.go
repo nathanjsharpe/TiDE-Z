@@ -1,71 +1,73 @@
 package client
 
 import (
+	//"fmt"
+	"crypto/ecdsa"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-	//"net/url"
-	"bytes"
+	"math/rand"
+	"time"
 	"zombies/messages"
 )
 
-var my_asset_id string ;
+// type Survivor struct {
+// 	x        float64
+// 	y        float64
+// 	goalx    float64
+// 	goaly    float64
+// 	asset_id string
+// 	alive    bool
+// }
 
-type di_msg struct{
-	message string    `json:"message"`
-    asset_id string `json:"asset_id"`
-    time int `json:"timestamp"`
-    tiid int `json:"tiid"`
-    sender string `json:"sender"`
-	
-	
+func RecvMsgThread(survivor messages.Survivor, starttime int, token string, pubkey *ecdsa.PublicKey) {
+	for starttime > time.Now().Second() {
+		time.Sleep(5 * time.Second)
+	}
+	for survivor.Alive == true {
+		msgs := messages.GetForAsset(survivor.Asset_id)
+		for _, m := range *msgs {
+			//this is fairly advanced, skipped for first tests
+			survivor.Alive = messages.VerifySent(m, pubkey)
+			fmt.Println(m)
+		}
+		time.Sleep(5 * time.Second)
+	}
 }
 
-func sendTiRaw( url string){
-	var jsonStr = []byte(`{"asset_id":"golee","latitude":"40.1","longitude":"-87.1"}`)
-    req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-    req.Header.Set("X-Auth-Token", "12345")
-    req.Header.Set("Content-Type", "application/json")
+func SendMsgThread(survivor messages.Survivor, starttime int, token string) {
+	for starttime > time.Now().Second() {
+		time.Sleep(5 * time.Second)
+	}
 
-    client := &http.Client{}
-    resp, err := client.Do(req)
-    if err != nil {
-        panic(err)
-    }
-    defer resp.Body.Close()
-    fmt.Println("response Status:", resp.Status)
-    fmt.Println("response Headers:", resp.Header)
-    body, _ := ioutil.ReadAll(resp.Body)
-    fmt.Println("response Body:", string(body))
-}
+	for survivor.Alive == true {
+		messages.CreateTiMsg(survivor, token)
+		time.Sleep(5 * time.Second)
+		fmt.Println("sending data")
+	}
 
-func recvMsg(url string){
-    
-    msgs := messages.GetForAsset(my_asset_id)
-    
-    
-//	var jsonStr = []byte(``)
-//	req, err := http.NewRequest("GET", url, bytes.NewBuffer(jsonStr))
-//    req.Header.Set("X-Auth-Token", "12345")
-//    req.Header.Set("Content-Type", "application/json")
-//	
-//    client := &http.Client{}
-//    resp, err := client.Do(req)
-//    if err != nil {
-//        panic(err)
-//    }
-//    defer resp.Body.Close()
-//    fmt.Println("response Status:", resp.Status)
-//    fmt.Println("response Headers:", resp.Header)
-//    body, _ := ioutil.ReadAll(resp.Body)
-//
-//    fmt.Println("response Body:", string(body))
+	//post the initial fence
+	fenceid := messages.PostGeoFenceMessage(survivor.Asset_id, survivor.X, survivor.Y, token)
+	//put, move random fences
+	for survivor.Alive == false {
+		survivor.X += (rand.Float64()*2.0 - 1.0) * .00032
+		survivor.Y += (rand.Float64()*2.0 - 1.0) * .00032
+		messages.PutGeoFenceMessage(survivor.Asset_id, survivor.X, survivor.Y, token, fenceid)
+		messages.CreateTiMsg(survivor, token)
+		time.Sleep(5 * time.Second)
+		fmt.Println("sending fence data")
+	}
 
 }
 
-func main() {
-	recvMsg("http://data.trakit.io/message/*")
-    sendTiRaw( "http://data.trakit.io/ti_raw_msg")
-    
-    
+func Create_New_Survivor(goalx float64, goaly float64, initialx float64, initialy float64, starttime int, asset_id string, token string, pubkey *ecdsa.PublicKey) {
+	survivor := messages.Survivor{}
+	survivor.Asset_id = asset_id
+	survivor.Alive = true
+	survivor.X = initialx
+	survivor.Y = initialy
+	survivor.Goalx = goalx
+	survivor.Goaly = goaly
+
+	RecvMsgThread(survivor, starttime, token, pubkey)
+	SendMsgThread(survivor, starttime, token)
+
 }
