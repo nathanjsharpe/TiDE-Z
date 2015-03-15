@@ -10,6 +10,8 @@ var leafletAwesomeMarkers = require('../vendor/leaflet.awesome-markers/leaflet.a
 var Survivor = require('./resources/survivor');
 var Notifier = require('./notifications/notifier');
 var awesomeMarkerColors = require('./util/awesome-marker-css-colors');
+var leaderboardTemplate = require('./templates/leaderboard');
+var Handlebars = require('handlebars');
 
 var search = require('../vendor/leaflet-search/leaflet-search');
 
@@ -20,30 +22,45 @@ var serverFailure = function (resp) {
     });
 }
 
+Handlebars.registerHelper("inc", function(value, options) {
+    return parseInt(value) + 1;
+});
+
+Handlebars.registerHelper("distance", function(distance, options)
+{
+    return parseFloat(distance).toFixed(2);
+});
+
+var template;
+
 var addUserInfoToPanel = function (user) {
   $( "#user-panel" ).find('.name').text(user.properties.name);
   $( "#user-panel" ).find('.score').text(user.properties.data.event);
 }
 
 var generateTable = function(resp){
-  var table =  $( "tbody" ); 
-  resp.map(function(item){
-    var distanceString = item.distance.toFixed(2);
-    var row =  '<tr>' + '<td>' + item.asset.name + '</td>' + '<td>' + item.asset.notes + '</td>'+ '<td>' + distanceString + 'mi. </td>' + '</tr>';
-    table.append(row);
-  });
+  var context = { survivors: resp }
+  var html = template(context);
+  $('table tbody').html(html);
+}
+
+function setupNext(interval) {
+  window.setTimeout(function() {
+    Survivor.getLeaderBoard()
+    .then(function(result) {
+      loader.hide();
+      generateTable(result);
+      setupNext(1500);
+    }, function(error) {
+      console.log('Error retrieving assets: ', error);
+    });
+  }, interval)
 }
 
 function init() {
   loader.show();
-  Survivor.getLeaderBoard()
-  .then(function(result) {
-    loader.hide();
-    generateTable(result);
-  }, function(error) {
-    console.log('Error retrieving assets: ', error);
-  });
-
+  template = Handlebars.compile(leaderboardTemplate);
+  setupNext(10);
 }
 
 module.exports = {

@@ -39,7 +39,7 @@ var map = {
     var mapOptions = {
       center: [46.8772, -96.7894],
       zoom: 11,
-      layers: [providers.mbStreets]
+      layers: [providers.hereNight]
     };
 
     for (var attrname in options) { mapOptions[attrname] = options[attrname] }
@@ -49,35 +49,18 @@ var map = {
     } else {
       this.map = L.map(containerId, mapOptions);
 
-      providers.mbStreets.addTo(this.map);
+      providers.hereNight.addTo(this.map);
 
       map_layers = {
-        "Street": providers.mbStreets,
-        "Satellite": providers.mbSatellite,
-        "Pirate": providers.mbPirate,
+        "HERE Night": providers.hereNight,
+        "HERE Night Gray": providers.hereNightGray,
         "Open Street Maps": providers.osm,
         "ESRI Streets": providers.esriStreets,
         "ESRI Imagery": providers.esriImagery,
         "MapQuest Open": providers.mqOpen
       };
 
-      // include google maps, but only if we've included the google api
-      // in the global namespace -- as of now this is only possible
-      // when including google via a <script> call, not require()
-      if (!(typeof google === "undefined")) {
-        map_layers = $.extend(map_layers, {
-          "Google Roadmap": providers.googleRoads,
-          "Google Roadmap (brony)": providers.googleRoads2,
-          //"Google Satellite": providers.googleSatellite,
-          "Google Terrain": providers.googleTerrain,
-          "Google Satellite": providers.googleHybrid
-        });
-      }
-
       this.layerControl = L.control.layers(map_layers, {
-        "Temperature": providers.temperature,
-        "Precipitation": providers.precipitation,
-        //"Heatmap": providers.heatMap
       }).addTo(this.map);
     }
     return this.map;

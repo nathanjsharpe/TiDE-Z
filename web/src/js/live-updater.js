@@ -18,7 +18,6 @@
 var _ = require('lodash');
 var reqwest = require('reqwest');
 var Assets = require('./resources/assets');
-var progress = require('./util/progress-indicator');
 
 function geoJsonify(messages) {
   return messages.map(function(message) {
@@ -72,8 +71,6 @@ var liveUpdater = {
 
       var messages = response;
 
-      progress.setColor('green').setText(messages.length);
-
       // Set last tiid to tiid of last message
       if (messages.length > 0) {
         self.lastTiid = _.last(messages).tiid;
@@ -88,17 +85,14 @@ var liveUpdater = {
       });
 
       self.setupNext();
-      progress.start();
     }, function (error) {
       self.results.failure++;
-      progress.setColor('red').setText('!');
       self.failureCallbacks.forEach(function(callback) {
         callback(error);
       });
       console.log('Live update error: ', error);
       self.lastResponse = error;
       self.setupNext();
-      progress.start();
     });
   },
   setLastTiid: function(tiid) {
@@ -108,7 +102,6 @@ var liveUpdater = {
     this.interval = interval;
   },
   start: function(opts) {
-    progress.init().start();
     if (!this.timeoutId) {
       var firstInterval = this.interval;
 

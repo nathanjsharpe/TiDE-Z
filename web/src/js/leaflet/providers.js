@@ -50,6 +50,28 @@ var noaaTemperature = L.tileLayer.wms('http://gis.srh.noaa.gov/arcgis/services/N
     opacity: 0.5
 });
 
+var HERE_normalNightMobile = L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.night/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+  attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
+  subdomains: '1234',
+  mapID: 'newest',
+  app_id: 'wjsbs4zHwp08cmL7jCp7',
+  app_code: 'k09galNjHKpdSDnfPTO97A',
+  base: 'base',
+  minZoom: 0,
+  maxZoom: 20
+});
+
+var HERE_normalNightGrey = L.tileLayer('http://{s}.{base}.maps.cit.api.here.com/maptile/2.1/maptile/{mapID}/normal.night.grey/{z}/{x}/{y}/256/png8?app_id={app_id}&app_code={app_code}', {
+  attribution: 'Map &copy; 1987-2014 <a href="http://developer.here.com">HERE</a>',
+  subdomains: '1234',
+  mapID: 'newest',
+  app_id: 'wjsbs4zHwp08cmL7jCp7',
+  app_code: 'k09galNjHKpdSDnfPTO97A',
+  base: 'base',
+  minZoom: 0,
+  maxZoom: 20
+});
+
 var noaaPrecipitation = L.tileLayer.wms('http://nowcoast.noaa.gov/wms/com.esri.wms.Esrimap/obs', {
     format: 'image/png',
     transparent: true,
@@ -93,6 +115,8 @@ module.exports = {
   esriStreets: esriStreets,
   esriImagery: Esri_WorldImagery,
   mqOpen: MapQuestOpen_OSM,
+  hereNight: HERE_normalNightMobile,
+  hereNightGray: HERE_normalNightGrey,
   temperature: noaaTemperature,
   precipitation: noaaPrecipitation,
   clouds: noaaClouds,
