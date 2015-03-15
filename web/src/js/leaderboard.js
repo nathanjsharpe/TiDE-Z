@@ -7,7 +7,6 @@ require('moment-timezone');
 var loader = require('./loader');
 var providers = require('./leaflet/providers');
 var leafletAwesomeMarkers = require('../vendor/leaflet.awesome-markers/leaflet.awesome-markers');
-var Assets = require('./resources/assets');
 var Survivor = require('./resources/survivor');
 var Notifier = require('./notifications/notifier');
 var awesomeMarkerColors = require('./util/awesome-marker-css-colors');

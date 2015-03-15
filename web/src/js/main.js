@@ -21,7 +21,7 @@ $(document).ready(function() {
 	var userToggle = $('#tab-select').unbind();
 	var toggleIcon = $('.fa-caret-up').unbind();
 	$('#user-panel').removeClass("show");
-	var panelHeight = $('#user-panel').height();
+	var panelHeight = $('#user-panel').outerHeight();
 	userToggle.on('click', function (e) {
 		e.preventDefault();
 		userToggle.animate({
@@ -34,7 +34,7 @@ $(document).ready(function() {
 				toggleIcon.removeClass('fa-rotate-180');
 	  		}
 		});
-		panelHeight = $('#user-panel').height();
+		panelHeight = $('#user-panel').outerHeight();
 	});
 
 });
