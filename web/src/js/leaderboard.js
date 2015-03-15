@@ -30,10 +30,8 @@ var addUserInfoToPanel = function (user) {
 var generateTable = function(resp){
   var table =  $( "tbody" ); 
   resp.map(function(item){
-    var row =  '<tr>' +
-                  '<td>' + resp.asset.name + '</td>' +
-                  '<td>' + resp.distance +'</td>' +
-                '</tr>'
+    var distanceString = item.distance.toFixed(2);
+    var row =  '<tr>' + '<td>' + item.asset.name + '</td>' + '<td>' + item.asset.notes + '</td>'+ '<td>' + distanceString + '</td>' + '</tr>';
     table.append(row);
   });
 }
