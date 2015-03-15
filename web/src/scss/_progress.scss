@@ -1,0 +1,8 @@
+$dimension: 40px;
+$navbar-height: 50px;
+
+.polling-progress {
+  height: $dimension;
+  width: $dimension;
+  margin-top: ($navbar-height - $dimension) / 2;
+}
