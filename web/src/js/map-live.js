@@ -26,6 +26,8 @@ var serverFailure = function (resp) {
     });
 }
 
+var horde = L.featureGroup();
+
 var addUserInfoToPanel = function (user) {
   $( "#user-panel" ).find('#js-name').text(user.properties.name);
   $( "#user-panel" ).find('#js-compnay').text(user.properties.asset.notes);
@@ -56,6 +58,11 @@ liveUpdater.registerSuccessCallback(function(resp) {
 
       // Move map to new location if device is focused
       if (msg.asset_id === trakitMap.data.focusedDevice) {
+        trakitMap.data.markers[msg.asset_id].setIcon(L.AwesomeMarkers.icon({
+          icon: trakitMap.data.assets[msg.asset_id].icon,
+          markerColor: 'purple',
+          prefix: 'fa'
+        }))
         trakitMap.map.panTo(L.latLng(
           msg.latitude,
           msg.longitude
@@ -63,6 +70,7 @@ liveUpdater.registerSuccessCallback(function(resp) {
       }
     }
   });
+  trakitMap.map.panInsideBounds(horde.getBounds());
 });
 
 function setUpSearch (map, geoJson) {
@@ -165,6 +173,7 @@ function pointToLayer(feature, latlng) {
   }
   var marker = L.marker(latlng, markerOptions);
   trakitMap.data.markers[feature.properties.asset.deviceAddress] = marker;
+  horde.addLayer(marker);
   return marker;
 }
 
@@ -178,6 +187,7 @@ function trailPointToLayer(feature, latlng) {
     trakitMap.data.trailMarkers[feature.properties.asset.deviceAddress] = [];
   }
   trakitMap.data.trailMarkers[feature.properties.asset.deviceAddress].unshift(marker);
+
   return marker;
 }
 

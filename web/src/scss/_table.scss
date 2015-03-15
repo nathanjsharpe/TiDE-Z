@@ -12,7 +12,7 @@
   $medium-screen: em(640) !default;
   $large-screen: em(860) !default;
   $base-font-color: $dark-gray !default;
-  
+
   width: 100%;
 
   th {
@@ -76,6 +76,44 @@
           margin-bottom: 0;
           width: auto;
         }
+      }
+    }
+  }
+}
+
+.change-icon-up {
+  color: green;
+}
+.change-icon-down {
+  color: $red;
+}
+.change-icon-stay {
+  color: $med-brown;
+}
+.change-icon-up,
+.change-icon-down,
+.change-icon-stay {
+  float: right;
+  position:relative;
+}
+
+#table {
+  font-size: 0.9em;
+  thead {
+    th:first-child {
+      padding-right: 0px;
+    }
+  }
+  tbody {
+    td {
+      padding: 5px;
+
+      &:first-child {
+        padding-right: 0px;
+        padding-left: 8px;
+      }
+      &:nth-child(3) {
+        max-width: 25%;
       }
     }
   }

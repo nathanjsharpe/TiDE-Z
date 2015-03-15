@@ -32,7 +32,23 @@ Handlebars.registerHelper("distance", function(distance, options)
     return parseFloat(distance).toFixed(2);
 });
 
+Handlebars.registerHelper("changeIcon", function(survivor, index)
+{
+    var lastIndex = _.findIndex(lastResp, { id: survivor.id });
+    console.log(lastIndex, index);
+    var icon = '';
+    if (lastIndex != -1 && index < lastIndex) {
+        icon = '<i class="fa fa-fw fa-chevron-up change-icon-up"></i>';
+    } else if (lastIndex != -1 && index > lastIndex) {
+        icon = '<i class="fa fa-fw fa-chevron-down change-icon-down"></i>';
+    } else {
+        icon = '';//'<i class="fa fa-fw fa-circle-thin change-icon-stay"></i>';
+    }
+    return new Handlebars.SafeString(icon)
+});
+
 var template;
+var lastResp;
 
 var addUserInfoToPanel = function (user) {
   $( "#user-panel" ).find('.name').text(user.properties.name);
@@ -51,7 +67,8 @@ function setupNext(interval) {
     .then(function(result) {
       loader.hide();
       generateTable(result);
-      setupNext(1500);
+      lastResp = result;
+      setupNext(3000);
     }, function(error) {
       console.log('Error retrieving assets: ', error);
     });
