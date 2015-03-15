@@ -193,6 +193,7 @@ function init() {
 
   Assets.getAllWithTrails()
   .then(function(result) {
+    console.log(result)
     loader.hide();
     trakitMap.data.assets = _.groupBy(result.assets, function(a) { return a.properties.asset.deviceAddress });
     setupMap(result.assets, result.trails);
